@@ -42,4 +42,10 @@
             <input type="text" name="phone" class="form-control">
         </div>
         <div class="form-group">
-            <label for
+        <label for="profile_picture">Profile Picture</label>
+            <input type="file" name="profile_picture" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Employee</button>
+    </form>
+</div>
+@endsection

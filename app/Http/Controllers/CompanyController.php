@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -58,6 +59,8 @@ class CompanyController extends Controller
     public function show(string $id)
     {
         //
+        $company = Company::find($id);
+
         return view('companies.show', compact('company'));
     }
 
@@ -67,6 +70,8 @@ class CompanyController extends Controller
     public function edit(string $id)
     {
         //
+        $company = Company::find($id);
+
         return view('companies.edit', compact('company'));
     }
 
@@ -75,7 +80,7 @@ class CompanyController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $company = Company::find($id);
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email',
@@ -100,7 +105,7 @@ class CompanyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $company = Company::find($id);
         $company->delete();
 
         return redirect()->route('companies.index')->with('success', 'Company deleted successfully');

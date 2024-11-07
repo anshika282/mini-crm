@@ -48,7 +48,7 @@
         <div class="form-group">
             <label for="profile_picture">Profile Picture</label><br>
             @if($employee->profile_picture)
-                <img src="{{ route('employees.profile_picture', $employee->id) }}" width="100" height="100" alt="Profile Picture"><br><br>
+            <img src="{{ asset('storage/app/private/private/profile_pictures/' . $employee->profile_picture) }}" width="100" height="100" alt="Profile Picture">
             @endif
             <input type="file" name="profile_picture" class="form-control">
         </div>
