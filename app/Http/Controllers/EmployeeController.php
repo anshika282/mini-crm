@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -61,6 +63,8 @@ class EmployeeController extends Controller
     public function show(string $id)
     {
         //
+        $employee = Employee::find($id);
+
         return view('employees.show', compact('employee'));
     }
 
@@ -71,6 +75,7 @@ class EmployeeController extends Controller
     {
         //
         $companies = Company::all();
+        $employee = Employee::find($id);
 
         return view('employees.edit', compact('employee', 'companies'));
     }
@@ -81,6 +86,7 @@ class EmployeeController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $employee = Employee::find($id);
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -107,9 +113,19 @@ class EmployeeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $employee = Employee::find($id);
         $employee->delete();
 
         return redirect()->route('employees.index')->with('success', 'Employee deleted successfully');
+    }
+
+    public function showProfilePicture(Employee $employee)
+    {
+        // Ensure the user is authenticated to view the private file
+        if ($employee->profile_picture) {
+            return Storage::disk('private')->response('profile_pictures/'.$employee->profile_picture);
+        }
+
+        return abort(404, 'Profile picture not found.');
     }
 }
