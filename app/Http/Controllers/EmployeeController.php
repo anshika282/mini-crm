@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -46,9 +47,12 @@ class EmployeeController extends Controller
         ]);
 
         $employee = new Employee($request->all());
-
+        $directory = 'profile_pictures'; // Remove the 'private' part here
+        if (! Storage::disk('private')->exists($directory)) {
+            Storage::disk('private')->makeDirectory($directory);
+        }
         if ($request->hasFile('profile_picture')) {
-            $path = $request->file('profile_picture')->store('private/profile_pictures');
+            $path = $request->file('profile_picture')->store($directory, 'private');
             $employee->profile_picture = basename($path);
         }
 
@@ -97,9 +101,14 @@ class EmployeeController extends Controller
         ]);
 
         $employee->fill($request->all());
+        $directory = 'profile_pictures'; // Remove the 'private' part here
 
+        // Ensure the 'profile_pictures' directory exists within 'private'
+        if (! Storage::disk('private')->exists($directory)) {
+            Storage::disk('private')->makeDirectory($directory);
+        }
         if ($request->hasFile('profile_picture')) {
-            $path = $request->file('profile_picture')->store('private/profile_pictures');
+            $path = $request->file('profile_picture')->store($directory, 'private');
             $employee->profile_picture = basename($path);
         }
 
@@ -121,9 +130,17 @@ class EmployeeController extends Controller
 
     public function showProfilePicture(Employee $employee)
     {
-        // Ensure the user is authenticated to view the private file
-        if ($employee->profile_picture) {
-            return Storage::disk('private')->response('profile_pictures/'.$employee->profile_picture);
+        if (auth()->check()) {
+
+            if ($employee->profile_picture) {
+                $filePath = 'profile_pictures/'.$employee->profile_picture;
+
+                if (Storage::disk('private')->exists($filePath)) {
+                    return Storage::disk('private')->response($filePath);
+                } else {
+                    return response()->json(['error' => 'File not found'], 404);
+                }
+            }
         }
 
         return abort(404, 'Profile picture not found.');

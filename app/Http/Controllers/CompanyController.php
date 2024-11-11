@@ -12,7 +12,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+
         $companies = Company::paginate(10);
 
         return view('companies.index', compact('companies'));
@@ -44,7 +44,8 @@ class CompanyController extends Controller
 
         // Handle logo upload if it exists
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('public/logos');
+            $filename = $request->file('logo')->getClientOriginalName();
+            $path = $request->file('logo')->storeAs('public/logos', $filename);
             $company->logo = basename($path);
         }
 

@@ -14,6 +14,10 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::get('/employees/{employee}/profile-picture', [EmployeeController::class, 'showProfilePicture'])
+    ->middleware('auth')
+    ->name('employees.profile_picture');
+
 Route::get('/dashboard', function () {
 
     return view('dashboard');
