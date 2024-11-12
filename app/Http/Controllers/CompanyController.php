@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddCompanyRequest;
 use App\Models\Company;
-use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -30,22 +30,14 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AddCompanyRequest $request)
     {
-        //
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email',
-            'logo' => 'nullable|image|dimensions:min_width=100,min_height=100',
-            'website' => 'nullable|url',
-        ]);
 
         $company = new Company($request->all());
 
-        // Handle logo upload if it exists
         if ($request->hasFile('logo')) {
             $filename = $request->file('logo')->getClientOriginalName();
-            $path = $request->file('logo')->storeAs('public/logos', $filename);
+            $path = $request->file('logo')->store('logos', 'public');
             $company->logo = basename($path);
         }
 
@@ -79,20 +71,14 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(AddCompanyRequest $request, string $id)
     {
         $company = Company::find($id);
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email',
-            'logo' => 'nullable|image|dimensions:min_width=100,min_height=100',
-            'website' => 'nullable|url',
-        ]);
-
         $company->fill($request->all());
 
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('public/logos');
+            $filename = $request->file('logo')->getClientOriginalName();
+            $path = $request->file('logo')->store('logos', 'public');
             $company->logo = basename($path);
         }
 
