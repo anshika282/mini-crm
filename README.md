@@ -43,8 +43,8 @@ A lightweight CRM application designed for efficient customer and company manage
    edit the env variables for the database connections.
 
 4. **Run migrations:**
-  ```bash
-   php artisan migrate
+    ```bash
+    php artisan migrate
 
 5. **For the database seeding:**
    ```bash
