@@ -47,19 +47,21 @@ A lightweight CRM application designed for efficient customer and company manage
    php artisan migrate
 
 5. **For the database seeding:**
-  ```bash
+   ```bash
    php artisan db:seed
 
 6. **Storage Link**
-  ```bash
-   php artisan storage:link
-   //if problem occurs : change the R/W mode of the storage.
+   ```bash
+    php artisan storage:link
+    //if problem occurs : change the R/W mode of the storage.
 
 7. **Server Start**
-  ```bash
-   php artisan serve
+    ```bash
+    php artisan serve
 
-start url is /regiter or /login
+Note : start url is /regiter or /login
+
+
 
 
 
